@@ -1,0 +1,37 @@
+<!--
+  ============================================================================
+   ЧТО ЭТО: фрагмент для файла AndroidManifest.xml вашего Android-проекта.
+   Куда вставлять: файл app/src/main/AndroidManifest.xml.
+
+   Полностью файл должен выглядеть примерно так (замените com.arsen.blocker
+   на название своего пакета, если оно другое):
+  ============================================================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.arsen.blocker">
+
+    <!-- Разрешение на работу с сетью — без него команды не уйдут на ПК -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Необязательно: чтобы прочитать общий файл настроек client.json
+         (нужно только на Android 12 и ниже; на новых версиях достаточно
+         того, что файл лежит в общей памяти) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <application
+        android:allowBackup="true"
+        android:label="ArsenBlocker"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

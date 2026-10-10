@@ -1,0 +1,42 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test Android/Termux client protocol
+        shell: pwsh
+        run: python tests/test_client.py
+
+      - name: Test PowerShell agent logic and Python signature compatibility
+        shell: pwsh
+        run: pwsh -NoProfile -File tests/test_protocol.ps1
+
+      - name: Build self-contained setup executable wrapper
+        shell: pwsh
+        run: pwsh -NoProfile -ExecutionPolicy Bypass -File windows/build_setup_exe.ps1
+
+      - name: Publish EXE as downloadable build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArsenBlockerSetup-windows-x64
+          path: dist/ArsenBlockerSetup.exe
+          if-no-files-found: error
+          retention-days: 30

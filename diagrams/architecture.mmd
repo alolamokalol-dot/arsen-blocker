@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph PHONE["ТЕЛЕФОН — Android (пульт управления)"]
+        direction TB
+        UI["Интерфейс Арсена<br/>список профилей Windows,<br/>время блокировки,<br/>кнопки: Пинг / Блок / Разблокировать"]
+        BUILD["Сборщик запроса<br/>JSON + подпись HMAC-SHA256<br/>+ метка времени + одноразовый код"]
+        CFG["client.json<br/>IP · порт · токен"]
+        UI --> BUILD
+        CFG --> BUILD
+    end
+
+    subgraph NET["ЛОКАЛЬНАЯ СЕТЬ (Wi-Fi)"]
+        FW["Правило брандмауэра Windows<br/>входящее TCP 9099<br/>только LocalSubnet"]
+    end
+
+    subgraph PC["ПК С WINDOWS — агент block_agent.ps1 (от имени SYSTEM)"]
+        direction TB
+        LSN["TCP-сервер<br/>слушает 0.0.0.0:9099"]
+        AUTH["Проверка безопасности<br/>HMAC-SHA256 · свежесть метки времени ±120 с<br/>· список MAC-адресов · сравнение токена"]
+        CMD["Обработчик команд<br/>ping · info · users · status · block · unblock"]
+        BLK["Логика блокировки<br/>немедленный logoff активной сессии<br/>+ флаг блокировки на N минут"]
+        WD["Сторожевой цикл<br/>каждые 5 секунд: кто вошёл,<br/>хотя заблокирован → снова logoff"]
+        SESS["Опрос сессий Windows<br/>explorer.exe → владелец + SessionId<br/>резерв: query session"]
+        DB["config.json<br/>C:\ProgramData\ArsenBlocker<br/>токен · порт · protected_users · блокировки"]
+        LOG["agent.log<br/>журнал команд и событий"]
+        TASK["Планировщик задач Windows<br/>задача ArsenBlockerAgent<br/>автозапуск при включении ПК"]
+        LSN --> AUTH
+        AUTH --> CMD
+        CMD --> BLK
+        BLK --> SESS
+        WD --> SESS
+        WD --> BLK
+        CMD --> DB
+        DB --> WD
+        CMD --> LOG
+        TASK -.->|"запускает"| LSN
+        LSN --> DB
+    end
+
+    ARSEN["Арсен<br/>администратор ПК"]
+    ARSEN -->|"один раз настраивает<br/>автозапуск"| TASK
+    ARSEN -->|"нажимает кнопки"| UI
+    BUILD -->|"запрос: одна строка JSON + подпись"| FW
+    FW -->|"доставка на порт 9099"| LSN
+    CMD -.->|"ответ: одна строка JSON"| UI

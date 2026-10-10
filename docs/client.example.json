@@ -1,0 +1,7 @@
+{
+  "host": "192.168.1.50",
+  "port": 9099,
+  "token": "c2197f0d4b6a8e15c3d9f7a2b4e6c8d0a1b2c3d4e5f60718293a4b5c6d7e8f90",
+  "security": "hmac",
+  "timeout": 8
+}

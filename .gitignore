@@ -1,0 +1,21 @@
+# Generated Windows binary (download it from the GitHub Actions artifact)
+/dist/
+
+# Local and secret configuration
+client.json
+config.json
+*.broken_*
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local logs
+agent.log
+agent.log.1
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

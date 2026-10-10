@@ -1,0 +1,45 @@
+=============================================================================
+ ArsenBlocker для Android — что добавить в проект Android Studio
+=============================================================================
+
+1) Файл app/build.gradle (или app/build.gradle.kts) — убедитесь, что есть
+   такие настройки:
+
+   android {
+       compileSdk 34
+       defaultConfig {
+           applicationId "com.arsen.blocker"
+           minSdk 24                    // Android 7.0 и новее
+           targetSdk 34
+       }
+   }
+
+   dependencies {
+       implementation "androidx.appcompat:appcompat:1.6.1"
+       // Больше ничего дополнительно не нужно:
+       // сеть, HMAC и JSON есть в самом Android.
+   }
+
+2) Файл AndroidManifest.xml — добавьте разрешение INTERNET и нужную тему
+   (готовый фрагмент — в файле AndroidManifest_snippet.xml).
+
+3) Файл MainActivity.kt — замените его содержимое на код из MainActivity.kt
+   этой папки.
+
+4) Сборка и установка: кнопка Run в Android Studio (телефон подключён
+   по USB с включённой отладкой), либо Build -> Build Bundle(s)/APK(s)
+   -> Build APK(s), затем перекиньте APK на телефон и установите.
+
+ВАЖНО ПРО СОХРАНЕНИЕ НАСТРОЕК
+   Приложение хранит IP, порт и токен на телефоне (SharedPreferences).
+   При обновлении приложения настройки сохраняются.
+   ПРИ УДАЛЕНИИ приложения Android стирает их. Чтобы ничего не потерять:
+     • держите копию файла /sdcard/ArsenBlocker/client.json (его создаёт
+       пульт для Termux — приложение умеет читать этот файл), или
+     • просто скопируйте токен и IP в заметку перед удалением.
+
+ДРУГОЙ (БОЛЕЕ ПРОСТОЙ) ВАРИАНТ БЕЗ ANDROID STUDIO
+   Если компилировать APK не хочется, используйте:
+     • client_tui.py — текстовый пульт в Termux (самый простой путь);
+     • client_gui.py — пульт с окошками и кнопками в приложении Pydroid 3
+       (в Pydroid 3 нужно один раз установить модули: Tkinter уже встроен).

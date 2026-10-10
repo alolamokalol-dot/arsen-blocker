@@ -1,0 +1,25 @@
+{
+  "listen_port": 9099,
+  "bind_address": "0.0.0.0",
+  "check_interval_seconds": 5,
+  "max_block_minutes": 1440,
+  "protect_admins": true,
+  "protected_users": [
+    "Administrator",
+    "Администратор",
+    "SYSTEM",
+    "DefaultAccount",
+    "WDAGUtilityAccount",
+    "Гость",
+    "Guest"
+  ],
+  "security": {
+    "mode": "hmac",
+    "token": "ВСТАВЬТЕ_СЮДА_ВАШ_48-СИМВОЛЬНЫЙ_ТОКЕН",
+    "max_clock_skew_seconds": 120,
+    "allowed_macs": []
+  },
+  "log_level": "INFO",
+  "blocked": {},
+  "comment": "Файл настроек ArsenBlocker. Лежит в C:\\ProgramData\\ArsenBlocker\\config.json и сохраняется при переустановке программы. Сохраняйте резервную копию: здесь ваш токен доступа."
+}
