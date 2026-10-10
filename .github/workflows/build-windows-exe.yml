@@ -23,6 +23,8 @@ jobs:
 
       - name: Test Android/Termux client protocol
         shell: pwsh
+        env:
+          PYTHONIOENCODING: utf-8
         run: python tests/test_client.py
 
       - name: Test PowerShell agent logic and Python signature compatibility
